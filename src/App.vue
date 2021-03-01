@@ -1,11 +1,6 @@
 <template>
   <div id="app">
-    <Header />
-    <!-- <div id="nav">
-      <router-link to="/">Main</router-link>
-      <router-link to="/register">Register</router-link>
-      <router-link to="/signin">Sign In</router-link>
-    </div> -->
+    <Header :user="user" />
     <router-view />
   </div>
 </template>
@@ -15,6 +10,11 @@ import Header from "@/components/UI/Header.vue";
 export default {
   components: {
     Header
+  },
+  computed: {
+    user() {
+      return this.$store.state.user;
+    }
   }
 };
 </script>
@@ -30,13 +30,14 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  // text-align: center;
   color: #2c3e50;
-  background-color: rgb(240, 239, 239);
+  background-color: rgb(255, 255, 255);
   min-height: 400px;
-  max-height: auto;
+  max-height: 100%;
+  border: 1px solid rgb(212, 212, 212);
+  // border-radius: 1.2rem;
+  // box-shadow: 5px 4px 30px 0px rgb(112, 112, 112);
 }
-
 #nav {
   padding: 30px;
 

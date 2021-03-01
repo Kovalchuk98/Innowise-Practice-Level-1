@@ -1,11 +1,17 @@
 <template>
   <div class="item_wrapper">
     <div class="wrapper_check">
-      <input type="checkbox" name="task" :id="task.id" />
+      <input
+        v-model="task.completed"
+        type="checkbox"
+        name="task"
+        :id="task.id"
+        @change="toogle(task)"
+      />
       <label :for="task.id">{{ task.title }}</label>
     </div>
     <button @click="$router.push({ name: 'task', params: { id: task.id } })">
-      Task Details
+      ...
     </button>
   </div>
 </template>
@@ -16,6 +22,16 @@ export default {
     task: {
       type: Object,
       require: true
+    }
+  },
+  data() {
+    return {
+      // completed: this.task.completed
+    };
+  },
+  methods: {
+    toogle(task) {
+      this.$store.dispatch("toogle", task);
     }
   }
 };
