@@ -10,8 +10,7 @@ export default new Vuex.Store({
   state: {
     user: null,
     taskArray: {},
-    curday: {},
-    error: null
+    curday: {}
   },
   mutations: {
     setUser(state, payload) {
@@ -68,19 +67,20 @@ export default new Vuex.Store({
     async fetchFromDb({ commit }) {
       try {
         await fireDb
-          .ref("tasks")
+          .ref(collectionName)
           .child(`user_${fireAuth.currentUser.uid}`)
           .on("value", snap => {
             const days = [];
             days.push(snap.val());
             commit("setTasks", days[0]);
+            // console.log(days[0]);
           });
       } catch (e) {
         this._vm.$toast.warning(e.message);
       }
     },
     // eslint-disable-next-line no-unused-vars
-    async addtask({ commit }, { title, descr, taskdate, completed }) {
+    async addtask({ commit, state }, { title, descr, taskdate, completed }) {
       try {
         const taskKey = fireDb
           .ref()
@@ -100,13 +100,12 @@ export default new Vuex.Store({
             id: taskKey.slice(1, taskKey.length),
             date: taskdate
           });
-        console.log(addRef);
       } catch (e) {
         this._vm.$toast.warning(e.message);
       }
     },
     // eslint-disable-next-line no-unused-vars
-    async toogle({ commit, dispatch }, payload) {
+    async toogle({ dispatch }, payload) {
       try {
         await fireDb
           .ref(collectionName)
@@ -116,7 +115,7 @@ export default new Vuex.Store({
           .update({
             completed: !payload.completed
           });
-        // dispatch("fetchFromDb");
+        dispatch("fetchFromDb");
       } catch (e) {
         this._vm.$toast.warning(e.message);
       }
@@ -143,7 +142,7 @@ export default new Vuex.Store({
         }
       }
 
-      console.log(curday);
+      // console.log(curday);
 
       commit("setDayTasks", curday);
     }
@@ -154,9 +153,6 @@ export default new Vuex.Store({
     },
     getUser(state) {
       return state.user;
-    },
-    error(state) {
-      return state.error;
     }
   },
   modules: {}
