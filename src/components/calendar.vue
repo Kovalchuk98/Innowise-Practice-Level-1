@@ -1,34 +1,35 @@
 <template>
   <div class="calendar_wrapper">
-    <div
+    <calendar-item
       v-for="(day, index) in days"
       :key="index"
-      class="day_wrapper"
-      @click="select(day, index)"
+      @select="select"
       :class="[activeIndex === index ? 'activeClass' : '']"
-    >
-      <span>{{ day.weekday }}</span>
-      <span>{{ day.number }}</span>
-      <span>{{ day.flag }}</span>
-      <div class="points_wrapper" :class="taskColor">
-        <span>•</span>
-        <span>•</span>
-      </div>
-    </div>
+      :day="day"
+      :index="index"
+      :activeFlag="
+        activeDays.includes(`${day.year}-${day.month}-${day.number}`)
+      "
+      :doneFlag="doneDays.includes(`${day.year}-${day.month}-${day.number}`)"
+    />
   </div>
 </template>
-
 <script>
+import { mapGetters } from "vuex";
+import CalendarItem from "@/components/calendarItem.vue";
 export default {
   props: {
     days: {
       type: Array,
       required: true
     },
-    taskFlag: {
+    taskLength: {
       type: Number,
       required: true
     }
+  },
+  components: {
+    CalendarItem
   },
   data() {
     return {
@@ -36,34 +37,40 @@ export default {
       selectDay: null
     };
   },
+  created() {
+    this.checkStatus();
+  },
   computed: {
-    taskColor() {
-      let color;
-      // if (this.taskFlag >= 1 && this.taskFlag < this.taskLength) {
-      if (this.taskFlag >= 1 && this.taskFlag < this.taskLength) {
-        color = "light";
-      } else {
-        color = "darker";
-      }
-      return color;
-      // return this.taskFlag >= 1 && this.taskFlag < this.taskLength
-      //   ? "darker"
-      //   : "darker";
+    ...mapGetters(["getAllTasks", "getDoneDays", "getActiveDays"]),
+    tasksAll() {
+      return this.getAllTasks;
+    },
+    activeDays() {
+      return this.getActiveDays;
+    },
+    doneDays() {
+      return this.getDoneDays;
     }
   },
   methods: {
-    select(day, index) {
-      let number = "";
-      if (day.number.toString().length < 2) {
-        number = "0" + day.number;
-      } else {
-        number = day.number;
-      }
-      let str = `${day.year}-${day.month}-${number}`;
-      console.log(str);
-      index == 0 ? (this.activeIndex = -1) : (this.activeIndex = index);
-
-      this.$emit("select", str);
+    select({ idx, day }) {
+      idx === 0 ? (this.activeIndex = -1) : (this.activeIndex = idx);
+      this.$emit("select", day);
+    },
+    checkStatus() {
+      let activeArray = [];
+      let doneArray = [];
+      let obj = this.tasksAll;
+      Object.entries(obj).forEach(dates => {
+        Object.entries(dates[1]).forEach(task => {
+          if (task[1].completed === true) {
+            if (!doneArray.includes(dates[0])) doneArray.push(dates[0]);
+          } else if (!activeArray.includes(dates[0]))
+            activeArray.push(dates[0]);
+        });
+      });
+      this.$store.commit("setActiveDays", activeArray);
+      this.$store.commit("setDoneDays", doneArray);
     }
   }
 };
@@ -80,49 +87,5 @@ export default {
   padding: 20px;
   width: 90%;
   overflow-y: auto;
-  h1 {
-    padding: 0;
-    margin: 0;
-  }
-  .day_wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    padding: 8px 18px;
-    border-radius: 1rem;
-    margin: 0 0.4rem;
-    background-color: #fff;
-    border: 2px solid rgb(201, 201, 201);
-    font-weight: bolder;
-    color: rgb(133, 133, 133);
-    cursor: pointer;
-    &:first-child {
-      background-color: black;
-      border: none;
-    }
-    .points_wrapper {
-      display: flex;
-      position: absolute;
-      bottom: -15px;
-    }
-    .light {
-      span:first-of-type {
-        color: rgb(240, 185, 6);
-      }
-      &:last-of-type {
-        color: rgb(255, 8, 0);
-      }
-    }
-    .darker {
-      span:first-of-type {
-        display: none;
-      }
-      &:last-of-type {
-        color: rgb(255, 8, 0);
-      }
-    }
-  }
 }
 </style>
