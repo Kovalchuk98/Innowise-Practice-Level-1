@@ -1,42 +1,98 @@
 <template>
   <div>
-    <h1>Create new task</h1>
-    <form action="" @submit.prevent class="form_wrapper">
+    <div class="form_wrapper">
+      <h2>{{ editing ? "Edit task" : "Create new task" }}</h2>
       <label for="">Title</label>
-      <input type="text" name="" id="" v-model="title" />
+      <input type="text" name="" id="" v-model="ndata.title" />
       <label for="">Description</label>
-      <textarea class="textarea" name="" id="" v-model="descr" />
+      <textarea class="textarea" name="" id="" v-model="ndata.descr" />
       <label for="">Date</label>
-      <input type="date" name="" id="" v-model="taskdate" />
-      <button class="add_btn" @click="addtask">Add a new task</button>
-    </form>
+      <input type="date" name="" id="" v-model="ndata.taskdate" />
+      <button v-if="!editing" class="add_btn" @click="createTask">
+        Save
+      </button>
+      <button v-else class="add_btn" @click="updateTask">Update</button>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+let temp = Object.freeze({
+  title: "",
+  descr: "",
+  date: "",
+  completed: false
+});
 export default {
-  // props: {
-  //   task: {
-  //     type: Object,
-  //     required: true
-  //   }
-  // },
   data() {
     return {
-      title: "",
-      descr: "",
-      taskdate: "",
-      completed: false
+      ndata: Object.assign({}, temp),
+      editing: false
     };
   },
+  computed: {
+    ...mapGetters("tasks", ["getTasks"]),
+    tasks() {
+      return this.getTasks;
+    }
+  },
+  created() {
+    if ("id" in this.$route.params) {
+      this.getTaskById();
+      this.editing = true;
+    } else {
+      this.editing = false;
+    }
+  },
   methods: {
-    addtask() {
-      this.$store.dispatch("addtask", {
-        title: this.title,
-        descr: this.descr,
-        taskdate: this.taskdate,
-        completed: this.completed
-      });
+    createTask() {
+      if (this.ndata.title !== "") {
+        this.$store
+          .dispatch("tasks/addTask", {
+            title: this.ndata.title,
+            descr: this.ndata.descr,
+            taskdate: this.ndata.taskdate,
+            completed: this.ndata.completed
+          })
+          .then(() => {
+            (this.ndata.title = ""),
+              (this.ndata.descr = ""),
+              (this.ndata.date = "");
+            this.$router.push("/");
+          });
+      } else {
+        this.$toast.warning("Please enter title");
+      }
+    },
+    updateTask() {
+      if (this.ndata.title !== "") {
+        this.$store
+          .dispatch("tasks/editTask", {
+            title: this.ndata.title,
+            descr: this.ndata.descr,
+            taskdate: this.ndata.date,
+            id: this.$route.params.id
+          })
+          .then(() => {
+            (this.ndata.title = ""),
+              (this.ndata.descr = ""),
+              (this.ndata.date = "");
+            this.$router.push("/");
+          });
+      } else {
+        this.$toast.warning("Please enter title");
+      }
+    },
+    getTaskById() {
+      let data = null;
+      let obj = this.tasks;
+      for (let key in obj) {
+        if (obj[key].id == this.$route.params.id) {
+          data = obj[key];
+        }
+      }
+      this.ndata = data;
     }
   }
 };
@@ -47,8 +103,10 @@ export default {
   display: flex;
   flex-direction: column;
   margin: 0 10%;
+  input {
+    padding: 10px 0;
+  }
   .textarea {
-    padding: 0;
     resize: none !important;
   }
   .add_btn {

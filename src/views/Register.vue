@@ -16,7 +16,7 @@
       </div>
       <div class="input_wrapper">
         <label for="confpass">Confirm Password</label>
-        <input type="confpasss" id="confpass" v-model="form.confpass" />
+        <input type="password" id="confpass" v-model="form.confpass" />
       </div>
       <div class="buttons_wrapper">
         <button type="submit" class="signup_btn" @click="signup">
@@ -48,13 +48,11 @@ export default {
   methods: {
     signup() {
       if (this.form.password === this.form.confpass) {
-        this.$store
-          .dispatch("signup", {
-            email: this.form.email,
-            password: this.form.password,
-            displayName: this.form.name
-          })
-          .then(() => this.$router.push({ path: "/" }));
+        this.$store.dispatch("user/signup", {
+          email: this.form.email,
+          password: this.form.password,
+          displayName: this.form.name
+        });
       } else {
         this.$toast.warning("Please make sure your passwords match");
       }
@@ -63,8 +61,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .wrapper {
+  background-color: #fff !important;
   .login_form {
     display: flex;
     flex-direction: column;
@@ -72,12 +71,11 @@ export default {
     justify-content: center;
     width: 100%;
     margin: 0 auto;
-    background-color: #fff;
     .input_wrapper {
       display: flex;
       flex-direction: column;
       margin-top: 10px;
-      width: 60%;
+      width: 80%;
       h1 {
         align-self: flex-start;
       }
@@ -89,10 +87,31 @@ export default {
       margin-top: 10px;
       display: flex;
       flex-wrap: wrap;
-      width: 60%;
+      width: 80%;
       .signup_btn {
+        cursor: pointer;
         width: 100%;
-        padding: 10px 0;
+        padding: 12px 0;
+        background-color: #ff4500;
+        color: #fff;
+        transition: 0.4s ease;
+        border: none;
+        border-radius: 10px;
+        &:hover,
+        :active {
+          background-color: #fd7341;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .wrapper {
+    .login_form {
+      .input_wrapper,
+      .buttons_wrapper {
+        width: 70%;
       }
     }
   }
