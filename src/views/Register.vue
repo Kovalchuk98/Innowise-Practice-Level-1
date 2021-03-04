@@ -48,11 +48,15 @@ export default {
   methods: {
     signup() {
       if (this.form.password === this.form.confpass) {
-        this.$store.dispatch("user/signup", {
-          email: this.form.email,
-          password: this.form.password,
-          displayName: this.form.name
-        });
+        this.$store
+          .dispatch("user/signup", {
+            email: this.form.email,
+            password: this.form.password,
+            displayName: this.form.name
+          })
+          .then(() => {
+            this.$router.push("/");
+          });
       } else {
         this.$toast.warning("Please make sure your passwords match");
       }
