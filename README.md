@@ -1,12 +1,11 @@
 # Innowise Lab Internship: Level 1: Clever to-do list 
----
 ##### Demo Link [https://kovalchuk98.github.io/Innowise-Practice-Level-1/](https://kovalchuk98.github.io/Innowise-Practice-Level-1/)
+
 # Task
----
 ####  Task requirements [Link](https://markdownlivepreview.com/)
 
 # How to run the app 
----
+
 #### 1. Clone this repository
 ```
 git clone https://github.com/Kovalchuk98/Innowise-Practice-Level-1.git
@@ -33,7 +32,7 @@ npm run serve
 ```
 
 # Application stack
----
+
 - **Vue CLI** - Vue CLI is a full system for rapid Vue.js development.
 - **Vuex** - State management pattern + library for Vue.js applications.
 - **Vue-router** - The official router for Vue. js .
