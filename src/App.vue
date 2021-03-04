@@ -7,13 +7,15 @@
 
 <script>
 import Header from "@/components/UI/Header.vue";
+import { mapGetters } from "vuex";
 export default {
   components: {
     Header
   },
   computed: {
+    ...mapGetters("user", ["getUser"]),
     user() {
-      return this.$store.state.user;
+      return this.getUser;
     }
   }
 };
@@ -31,12 +33,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  background-color: rgb(255, 255, 255);
   min-height: 400px;
   max-height: 100%;
-  border: 1px solid rgb(212, 212, 212);
-  // border-radius: 1.2rem;
-  // box-shadow: 5px 4px 30px 0px rgb(112, 112, 112);
+  border: none;
 }
 #nav {
   padding: 30px;
@@ -51,12 +50,46 @@ body {
   }
 }
 
+.fade-enter {
+  transition: 0.3s ease;
+  transform: translateY(-100%);
+}
+.fade-enter-to {
+  transition: 0.3s ease;
+  transform: translateX(0%);
+}
+.fade-leave {
+  transition: 0.3s ease;
+  transform: translateX(0%);
+}
+.fade-leave-to {
+  transition: 0.3s ease;
+  transform: translateX(-100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0.6s ease;
+}
+
 @media (min-width: 320px) {
   #app {
     display: flex;
     flex-direction: column;
     margin: 0 auto;
     max-width: 762px;
+  }
+}
+
+@media (min-width: 768px) {
+  #app {
+    border: 1px solid rgb(212, 212, 212);
+  }
+}
+
+@media (min-width: 1024px) {
+  #app {
+    margin-top: 5%;
   }
 }
 </style>
