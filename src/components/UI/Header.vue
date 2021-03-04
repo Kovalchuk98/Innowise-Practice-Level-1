@@ -1,6 +1,12 @@
 <template>
   <div class="header">
-    <router-link to="/" class="header_title">Clever To-Do List</router-link>
+    <mobileMenu v-if="isShow" @hide="isShow = !isShow" :user="user" />
+    <div>
+      <button class="menu_btn" @click="isShow = !isShow">
+        <img src="../../assets/burger.svg" alt="" width="20px" height="auto" />
+      </button>
+      <router-link to="/" class="header_title">Clever To-Do List</router-link>
+    </div>
     <div class="wrapper_block" v-if="user">
       <div class="user_wrapper">
         <img
@@ -13,14 +19,12 @@
         <span class="user_name">{{ user.displayName || user.email }}</span>
       </div>
       <button @click="logout" class="signout_btn">Sign Out</button>
-      <div @click="$emit('show-menu')" class="wrapper">
-        <div class="burger"></div>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
+import mobileMenu from "@/components/UI/Menu.vue";
 export default {
   props: {
     user: {
@@ -28,9 +32,17 @@ export default {
       require: true
     }
   },
+  components: {
+    mobileMenu
+  },
+  data() {
+    return {
+      isShow: false
+    };
+  },
   methods: {
     logout() {
-      this.$store.dispatch("logout").then(() => {
+      this.$store.dispatch("user/logout").then(() => {
         this.$router.push("/signin");
       });
     }
@@ -45,11 +57,27 @@ export default {
   align-items: center;
   background-color: rgb(255, 255, 255);
   margin: 0.5rem 2rem;
+  .menuWrapper {
+    position: fixed;
+    background-color: rgb(87, 85, 85);
+    width: 60%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  .menu_btn {
+    padding: 5px;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+  }
   .header_title {
     text-decoration: none;
     color: #363636;
     font-size: 1.2rem;
     font-weight: bold;
+    margin-left: 1rem;
   }
   .user_wrapper {
     display: flex;
@@ -62,7 +90,7 @@ export default {
     }
   }
   .wrapper_block {
-    display: flex;
+    display: none;
     align-items: center;
     .signout_btn {
       cursor: pointer;
@@ -70,13 +98,21 @@ export default {
       border-radius: 1.6rem;
       color: #fff;
       margin-left: 1rem;
-      padding: 8px 16px;
+      padding: 6px 12px;
       background-color: #4c00ff;
       transition: 0.2s linear;
       &:hover,
       :active {
         background-color: #7036f7;
       }
+    }
+  }
+  @media (min-width: 768px) {
+    .wrapper_block {
+      display: flex;
+    }
+    .menu_btn {
+      display: none;
     }
   }
 }

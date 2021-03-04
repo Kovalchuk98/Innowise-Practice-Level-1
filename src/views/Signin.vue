@@ -16,7 +16,12 @@
         </button>
         <p class="btn_title">Or Sign In with</p>
         <button @click="signInWithGoogle" class="google_btn">
-          G
+          <img
+            src="../assets/google.png"
+            alt=""
+            width="30px"
+            height="auto"
+          /><span>Sign in with Google</span>
         </button>
       </div>
       <div>
@@ -25,13 +30,11 @@
           <router-link to="/register">Sign Up</router-link>
         </p>
       </div>
-      {{ message }}
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -41,16 +44,10 @@ export default {
       }
     };
   },
-  computed: {
-    ...mapGetters(["error"]),
-    message() {
-      return this.error;
-    }
-  },
   methods: {
     signin() {
       this.$store
-        .dispatch("login", {
+        .dispatch("user/login", {
           email: this.form.email,
           password: this.form.password
         })
@@ -61,7 +58,7 @@ export default {
         });
     },
     signInWithGoogle() {
-      this.$store.dispatch("signInWithGoogle").then(() => {
+      this.$store.dispatch("user/signInWithGoogle").then(() => {
         this.$router.push({ path: "/" });
       });
     }
@@ -71,6 +68,7 @@ export default {
 
 <style lang="scss">
 .wrapper {
+  background-color: #fff !important;
   .login_form {
     display: flex;
     flex-direction: column;
@@ -78,7 +76,6 @@ export default {
     justify-content: center;
     width: 100%;
     margin: 0 auto;
-    background-color: #fff !important;
     .input_wrapper {
       display: flex;
       flex-direction: column;
@@ -102,14 +99,40 @@ export default {
         cursor: pointer;
       }
       .signin_btn {
-        padding: 10px 0;
+        padding: 12px 0;
+        background-color: #ff4500;
+        color: #fff;
+        transition: 0.4s ease;
+        border: none;
+        border-radius: 10px;
+        &:hover,
+        :active {
+          background-color: #fd7341;
+        }
       }
       .btn_title {
         width: 100%;
         text-align: center;
       }
       .google_btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         padding: 10px 0;
+        span {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .wrapper {
+    .login_form {
+      .input_wrapper,
+      .buttons_wrapper {
+        width: 70%;
       }
     }
   }
