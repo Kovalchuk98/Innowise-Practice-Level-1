@@ -37,11 +37,8 @@ export default {
       selectDay: null
     };
   },
-  created() {
-    this.checkStatus();
-  },
   computed: {
-    ...mapGetters(["getAllTasks", "getDoneDays", "getActiveDays"]),
+    ...mapGetters("tasks", ["getAllTasks", "getDoneDays", "getActiveDays"]),
     tasksAll() {
       return this.getAllTasks;
     },
@@ -56,21 +53,6 @@ export default {
     select({ idx, day }) {
       idx === 0 ? (this.activeIndex = -1) : (this.activeIndex = idx);
       this.$emit("select", day);
-    },
-    checkStatus() {
-      let activeArray = [];
-      let doneArray = [];
-      let obj = this.tasksAll;
-      Object.entries(obj).forEach(dates => {
-        Object.entries(dates[1]).forEach(task => {
-          if (task[1].completed === true) {
-            if (!doneArray.includes(dates[0])) doneArray.push(dates[0]);
-          } else if (!activeArray.includes(dates[0]))
-            activeArray.push(dates[0]);
-        });
-      });
-      this.$store.commit("setActiveDays", activeArray);
-      this.$store.commit("setDoneDays", doneArray);
     }
   }
 };

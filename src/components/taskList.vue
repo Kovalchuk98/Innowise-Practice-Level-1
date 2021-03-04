@@ -1,7 +1,8 @@
 <template>
   <div class="list_wrapper">
+    <h3 v-if="lengthTasks">{{ lengthTasks }} Task(s) today</h3>
     <taskItem v-for="task in taskArray" :key="task.id" :task="task" />
-    <button class="add_btn" @click="$router.push('/create')">
+    <button class="add_btn" @click="create(tday)">
       Add a new task
     </button>
   </div>
@@ -17,6 +18,10 @@ export default {
     taskArray: {
       type: Object,
       require: true
+    },
+    tday: {
+      type: String,
+      require: true
     }
   },
   data() {
@@ -24,7 +29,12 @@ export default {
   },
   computed: {
     lengthTasks() {
-      return !!Object.keys(this.taskArray).length;
+      return Object.keys(this.taskArray).length;
+    }
+  },
+  methods: {
+    create(tday) {
+      this.$router.push({ name: "create", params: tday });
     }
   }
 };
@@ -34,6 +44,10 @@ export default {
 .list_wrapper {
   display: flex;
   flex-direction: column;
+  margin: 20px;
+  h3 {
+    margin-top: 0;
+  }
   .add_btn {
     align-self: center;
     padding: 12px;

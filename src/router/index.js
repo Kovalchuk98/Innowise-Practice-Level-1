@@ -35,7 +35,7 @@ const routes = [
       import(/* webpackChunkName: "signin" */ "../views/Signin.vue")
   },
   {
-    path: "/create",
+    path: "/task/create",
     name: "create",
     props: true,
     component: () =>
@@ -45,10 +45,11 @@ const routes = [
     }
   },
   {
-    path: "/edit",
+    path: "/task/edit/:id",
     name: "edit",
     props: true,
-    component: () => import(/* webpackChunkName: "edit" */ "../views/Edit.vue"),
+    component: () =>
+      import(/* webpackChunkName: "edit" */ "../views/Create.vue"),
     meta: {
       requiresAuth: true
     }
