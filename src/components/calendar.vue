@@ -64,10 +64,12 @@ export default {
 }
 .calendar_wrapper {
   display: flex;
+  position: relative;
   justify-content: flex-start;
   margin: 0 auto;
   padding: 20px;
   width: 90%;
   overflow-y: auto;
+  z-index: 0;
 }
 </style>

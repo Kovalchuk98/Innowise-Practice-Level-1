@@ -19,7 +19,7 @@
         <button @click="signup">Sign Up</button>
       </div>
       <div v-else class="btn_wrapper">
-        <button @click="logout" class="button_out">
+        <button @click="signout" class="button_out">
           Sign Out
         </button>
       </div>
@@ -28,24 +28,38 @@
 </template>
 
 <script>
+import { mapMutations, mapActions } from "vuex";
 export default {
   props: {
     user: {
       type: Object
     }
   },
+  data() {
+    return {
+      route: {
+        signin: "/signin",
+        register: "/register"
+      }
+    };
+  },
   methods: {
+    ...mapMutations("tasks", ["setActiveDays", "setDoneDays", "setTasks"]),
+    ...mapActions("user", ["logout"]),
     signin() {
-      this.$router.push("/signin");
+      this.$router.push({ path: this.route.signin });
       this.$emit("hide");
     },
     signup() {
-      this.$router.push("/register");
+      this.$router.push({ path: this.route.register });
       this.$emit("hide");
     },
-    logout() {
-      this.$store.dispatch("user/logout").then(() => {
-        this.$router.push("/signin");
+    signout() {
+      this.logout().then(() => {
+        this.$router.push({ path: this.route.signin });
+        this.setActiveDays([]);
+        this.setDoneDays([]);
+        this.setTasks(null);
         this.$emit("hide");
       });
     }

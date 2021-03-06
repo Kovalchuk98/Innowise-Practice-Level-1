@@ -2,11 +2,11 @@
   <div class="item_wrapper">
     <div class="wrapper_check">
       <input
-        v-model="completed"
+        v-model="status"
         type="checkbox"
         name="task"
         :id="task.id"
-        @change="toogle(task)"
+        @change="toogleTask(task)"
       />
       <label :for="task.id">{{ task.title }}</label>
     </div>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   props: {
     task: {
@@ -45,15 +46,16 @@ export default {
   },
   data() {
     return {
-      completed: this.task.completed
+      status: this.task.completed
     };
   },
   methods: {
-    toogle(task) {
-      this.$store.dispatch("tasks/toogle", task);
+    ...mapActions("tasks", ["toogle", "deleteTask"]),
+    toogleTask(task) {
+      this.toogle({ date: task.date, id: task.id, status: this.status });
     },
     remove(task) {
-      this.$store.dispatch("tasks/deleteTask", task);
+      this.deleteTask({ date: task.date, id: task.id });
     }
   }
 };

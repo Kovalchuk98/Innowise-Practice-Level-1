@@ -63,70 +63,70 @@ export default {
         this._vm.$toast.warning(e.message);
       }
     },
-    async editTask(context, payload) {
-      // console.log(payload);
+    async editTask(context, { title, descr, taskdate, id }) {
       await fireDb
         .ref(collectionName)
         .child(`user_${fireAuth.currentUser.uid}`)
-        .child(payload.taskdate)
-        .child(payload.id)
+        .child(taskdate)
+        .child(id)
         .update({
-          title: payload.title,
-          descr: payload.descr,
-          date: payload.taskdate
+          title,
+          descr,
+          date: taskdate
         });
     },
-    async toogle(context, payload) {
+    async toogle(context, { date, id, status }) {
       try {
         await fireDb
           .ref(collectionName)
           .child(`user_${fireAuth.currentUser.uid}`)
-          .child(payload.date)
-          .child(payload.id)
+          .child(date)
+          .child(id)
           .update({
-            completed: !payload.completed
+            completed: status
           });
       } catch (e) {
         this._vm.$toast.warning(e.message);
       }
     },
-    async deleteTask(context, payload) {
+    async deleteTask({ dispatch }, { date, id }) {
       try {
         await fireDb
           .ref(collectionName)
           .child(`user_${fireAuth.currentUser.uid}`)
-          .child(payload.date)
-          .child(payload.id)
+          .child(date)
+          .child(id)
           .remove();
+        dispatch("getDayTasks", date);
       } catch (e) {
         this._vm.$toast.warning(e.message);
       }
     },
     getDayTasks({ commit, state }, payload) {
-      let obj = state.taskArray;
-      let curday = {};
+      const obj = state.taskArray;
+      const curday = {};
       for (let key in obj) {
-        if (key == payload) {
+        if (key === payload) {
           Object.assign(curday, obj[key]);
         }
       }
       commit("setDayTasks", curday);
     },
     initToday({ dispatch }) {
-      let now = new Date();
+      const now = new Date();
       const locale = "ru-RU";
       const date = now.toLocaleString(locale, {
         year: "numeric",
         month: "numeric",
         day: "numeric"
       });
-      let ar = date.split(".");
-      let str = `${ar[2]}-${ar[1]}-${ar[0]}`;
+      const ar = date.split(".");
+      const str = `${ar[2]}-${ar[1]}-${ar[0]}`;
       dispatch("getDayTasks", str);
     },
     checkStatus({ commit, state }) {
-      let activeArray = [];
-      let doneArray = [];
+      const activeArray = [];
+      const doneArray = [];
       Object.entries(state.taskArray).forEach(dates => {
         Object.entries(dates[1]).forEach(task => {
           if (task[1].completed === true) {
