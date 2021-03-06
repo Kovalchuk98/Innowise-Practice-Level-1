@@ -6,18 +6,10 @@
     <p>{{ task.date }}</p>
     <div class="bottom_wrapper">
       <div>
-        <button
-          class="btn"
-          @click="
-            $router.push({
-              path: `/task/edit/${task.id}`,
-              params: { id: task.id }
-            })
-          "
-        >
+        <button class="btn" @click="edit(task)">
           Edit
         </button>
-        <button class="btn" @click="deleteTask(task)">Delete</button>
+        <button class="btn" @click="remove(task)">Delete</button>
       </div>
       <p>
         Status:
@@ -30,11 +22,15 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      task: {}
+      task: {},
+      route: {
+        edit: "/task/edit",
+        main: "/"
+      }
     };
   },
   computed: {
@@ -47,17 +43,24 @@ export default {
     }
   },
   created() {
-    let obj = this.tasks;
+    const obj = this.tasks;
     for (let key in obj) {
-      if (key == this.$route.params.id) {
+      if (key === this.$route.params.id) {
         Object.assign(this.task, obj[key]);
       }
     }
   },
   methods: {
-    deleteTask(task) {
-      this.$store.dispatch("tasks/deleteTask", task).then(() => {
-        this.$router.push("/");
+    ...mapActions("tasks", ["deleteTask"]),
+    edit(task) {
+      this.$router.push({
+        path: `${this.route.edit}/${task.id}`,
+        params: { id: task.id }
+      });
+    },
+    remove(task) {
+      this.deleteTask(task).then(() => {
+        this.$router.push({ path: this.route.main });
       });
     }
   }

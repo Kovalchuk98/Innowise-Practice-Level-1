@@ -15,7 +15,7 @@
           <span>Sign In</span>
         </button>
         <p class="btn_title">Or Sign In with</p>
-        <button @click="signInWithGoogle" class="google_btn">
+        <button @click="signInGoogle" class="google_btn">
           <img
             src="../assets/google.png"
             alt=""
@@ -27,7 +27,7 @@
       <div>
         <p>
           Don't have an account?
-          <router-link to="/register">Sign Up</router-link>
+          <router-link :to="route.register">Sign Up</router-link>
         </p>
       </div>
     </div>
@@ -35,31 +35,35 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
       form: {
         email: "",
         password: ""
+      },
+      route: {
+        register: "/register",
+        main: "/"
       }
     };
   },
   methods: {
+    ...mapActions("user", ["login", "signInWithGoogle"]),
     signin() {
-      this.$store
-        .dispatch("user/login", {
-          email: this.form.email,
-          password: this.form.password
-        })
-        .then(() => {
-          this.form.email = "";
-          this.form.password = "";
-          this.$router.push("/");
-        });
+      this.login({
+        email: this.form.email,
+        password: this.form.password
+      }).then(() => {
+        this.form.email = "";
+        this.form.password = "";
+        this.$router.push({ path: this.route.main });
+      });
     },
-    signInWithGoogle() {
-      this.$store.dispatch("user/signInWithGoogle").then(() => {
-        this.$router.push({ path: "/" });
+    signInGoogle() {
+      this.signInWithGoogle().then(() => {
+        this.$router.push({ path: this.route.main });
       });
     }
   }
