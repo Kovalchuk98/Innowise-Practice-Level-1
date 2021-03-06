@@ -3,7 +3,7 @@
 ##### Demo Link [https://kovalchuk98.github.io/Innowise-Practice-Level-1/](https://kovalchuk98.github.io/Innowise-Practice-Level-1/)
 # Task
 
-####  Task requirements [Link](https://markdownlivepreview.com/)
+####  Task requirements [Link](https://docs.google.com/document/d/1heFuihWrsw14bCpUdr6fla9ysqE6IrsobSMKAOpBiKA/edit?usp=sharing)
 
 # How to run the app 
 
