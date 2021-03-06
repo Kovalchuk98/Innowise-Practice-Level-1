@@ -16,15 +16,17 @@
           width="34px"
           height="34px"
         />
+        <!-- :src="user.photoURL || require('../../assets/noimg.png')" -->
         <span class="user_name">{{ user.displayName || user.email }}</span>
       </div>
-      <button @click="logout" class="signout_btn">Sign Out</button>
+      <button @click="signout" class="signout_btn">Sign Out</button>
     </div>
   </div>
 </template>
 
 <script>
 import mobileMenu from "@/components/UI/Menu.vue";
+import { mapActions, mapMutations } from "vuex";
 export default {
   props: {
     user: {
@@ -37,13 +39,21 @@ export default {
   },
   data() {
     return {
-      isShow: false
+      isShow: false,
+      route: {
+        signin: "/signin"
+      }
     };
   },
   methods: {
-    logout() {
-      this.$store.dispatch("user/logout").then(() => {
-        this.$router.push("/signin");
+    ...mapMutations("tasks", ["setActiveDays", "setDoneDays", "setTasks"]),
+    ...mapActions("user", ["logout"]),
+    signout() {
+      this.logout().then(() => {
+        this.setActiveDays([]);
+        this.setDoneDays([]);
+        this.setTasks(null);
+        this.$router.push({ path: this.route.signin });
       });
     }
   }

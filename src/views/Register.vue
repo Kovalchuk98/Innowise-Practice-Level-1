@@ -19,14 +19,14 @@
         <input type="password" id="confpass" v-model="form.confpass" />
       </div>
       <div class="buttons_wrapper">
-        <button type="submit" class="signup_btn" @click="signup">
+        <button type="submit" class="signup_btn" @click="register">
           <span>Sign Up</span>
         </button>
       </div>
       <div>
         <p>
           Already have an account?
-          <router-link to="/signin">Sign In</router-link>
+          <router-link :to="route.signin">Sign In</router-link>
         </p>
       </div>
     </div>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -42,21 +43,24 @@ export default {
         password: "",
         displayName: "",
         confpass: ""
+      },
+      route: {
+        signin: "/signin",
+        main: "/"
       }
     };
   },
   methods: {
-    signup() {
+    ...mapActions("user", ["signup"]),
+    register() {
       if (this.form.password === this.form.confpass) {
-        this.$store
-          .dispatch("user/signup", {
-            email: this.form.email,
-            password: this.form.password,
-            displayName: this.form.name
-          })
-          .then(() => {
-            this.$router.push("/");
-          });
+        this.signup({
+          email: this.form.email,
+          password: this.form.password,
+          displayName: this.form.name
+        }).then(() => {
+          this.$router.push({ path: this.route.main });
+        });
       } else {
         this.$toast.warning("Please make sure your passwords match");
       }

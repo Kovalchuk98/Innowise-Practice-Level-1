@@ -25,7 +25,11 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      route: {
+        create: "create"
+      }
+    };
   },
   computed: {
     lengthTasks() {
@@ -34,7 +38,7 @@ export default {
   },
   methods: {
     create(tday) {
-      this.$router.push({ name: "create", params: tday });
+      this.$router.push({ name: this.route.create, params: tday });
     }
   }
 };

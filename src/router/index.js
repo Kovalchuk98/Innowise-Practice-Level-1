@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Main from "../views/Main.vue";
 import { fireAuth } from "../firebase";
+import Create from "../views/Create.vue";
 
 Vue.use(VueRouter);
 
@@ -48,8 +49,7 @@ const routes = [
     path: "/task/edit/:id",
     name: "edit",
     props: true,
-    component: () =>
-      import(/* webpackChunkName: "edit" */ "../views/Create.vue"),
+    component: Create,
     meta: {
       requiresAuth: true
     }

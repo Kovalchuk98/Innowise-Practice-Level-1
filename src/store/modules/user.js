@@ -21,12 +21,9 @@ export default {
         this._vm.$toast.warning(e.message);
       }
     },
-    async login(context, payload) {
+    async login(context, { email, password }) {
       try {
-        await fireAuth.signInWithEmailAndPassword(
-          payload.email,
-          payload.password
-        );
+        await fireAuth.signInWithEmailAndPassword(email, password);
       } catch (e) {
         this._vm.$toast.warning(e.message);
       }
