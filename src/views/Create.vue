@@ -1,6 +1,9 @@
 <template>
   <div>
     <div class="form_wrapper">
+      <router-link to="/" class="wrapper_link"
+        ><span class="arrow">←</span><span> Back</span>
+      </router-link>
       <h2>{{ editing ? "Edit task" : "Create new task" }}</h2>
       <label for="title">Title</label>
       <input type="text" name="title" id="title" v-model="ndata.title" />
@@ -25,6 +28,8 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import AppRoutes from "@/router/approutes";
+
 export default {
   data() {
     return {
@@ -34,10 +39,7 @@ export default {
         date: "",
         completed: false
       },
-      editing: false,
-      route: {
-        main: "/"
-      }
+      editing: false
     };
   },
   computed: {
@@ -88,14 +90,13 @@ export default {
       this.ndata.title = "";
       this.ndata.descr = "";
       this.ndata.date = "";
-      this.$router.push({ path: this.route.main });
+      this.$router.push({ path: AppRoutes.Home });
     },
     getTaskById() {
       const obj = this.tasks;
-      Object.values(obj).find(item => {
-        item === this.$route.params.id;
-        this.ndata = item;
-      });
+      this.ndata = Object.values(obj).find(
+        item => item.id == this.$route.params.id
+      );
     }
   }
 };
@@ -106,6 +107,23 @@ export default {
   display: flex;
   flex-direction: column;
   margin: 0 10%;
+  .wrapper_link {
+    text-decoration: none;
+    span {
+      text-decoration: none;
+      color: black;
+      font-size: 20px;
+      transition: 0.3s ease;
+    }
+    .arrow {
+      font-size: 24px;
+    }
+    &:hover {
+      span {
+        color: orangered;
+      }
+    }
+  }
   input {
     padding: 10px 0;
   }

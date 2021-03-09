@@ -6,7 +6,7 @@
         <img
           class="user_img"
           :src="user.photoURL || require('../../assets/noimg.png')"
-          alt="User Avatar"
+          alt="Avatar"
           width="34px"
           height="34px"
         />
@@ -29,34 +29,28 @@
 
 <script>
 import { mapMutations, mapActions } from "vuex";
+import AppRoutes from "@/router/approutes";
+
 export default {
   props: {
     user: {
       type: Object
     }
   },
-  data() {
-    return {
-      route: {
-        signin: "/signin",
-        register: "/register"
-      }
-    };
-  },
   methods: {
     ...mapMutations("tasks", ["setActiveDays", "setDoneDays", "setTasks"]),
     ...mapActions("user", ["logout"]),
     signin() {
-      this.$router.push({ path: this.route.signin });
+      this.$router.push({ path: AppRoutes.Signin });
       this.$emit("hide");
     },
     signup() {
-      this.$router.push({ path: this.route.register });
+      this.$router.push({ path: AppRoutes.Register });
       this.$emit("hide");
     },
     signout() {
       this.logout().then(() => {
-        this.$router.push({ path: this.route.signin });
+        this.$router.push({ path: AppRoutes.Signin });
         this.setActiveDays([]);
         this.setDoneDays([]);
         this.setTasks(null);

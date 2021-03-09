@@ -26,7 +26,7 @@
       <div>
         <p>
           Already have an account?
-          <router-link :to="route.signin">Sign In</router-link>
+          <router-link to="/signin">Sign In</router-link>
         </p>
       </div>
     </div>
@@ -35,6 +35,8 @@
 
 <script>
 import { mapActions } from "vuex";
+import AppRoutes from "@/router/approutes";
+
 export default {
   data() {
     return {
@@ -43,10 +45,6 @@ export default {
         password: "",
         displayName: "",
         confpass: ""
-      },
-      route: {
-        signin: "/signin",
-        main: "/"
       }
     };
   },
@@ -59,7 +57,7 @@ export default {
           password: this.form.password,
           displayName: this.form.name
         }).then(() => {
-          this.$router.push({ path: this.route.main });
+          this.$router.push({ path: AppRoutes.Home });
         });
       } else {
         this.$toast.warning("Please make sure your passwords match");
