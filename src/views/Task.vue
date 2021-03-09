@@ -1,12 +1,15 @@
 <template>
   <div class="task_wrapper">
+    <router-link to="/" class="wrapper_link"
+      ><span class="arrow">←</span><span> Back</span>
+    </router-link>
     <p>{{ task.title }}</p>
     <hr />
     <p>{{ task.descr }}</p>
     <p>{{ task.date }}</p>
     <div class="bottom_wrapper">
       <div>
-        <button class="btn" @click="edit(task)">
+        <button class="btn" @click="editTask(task)">
           Edit
         </button>
         <button class="btn" @click="remove(task)">Delete</button>
@@ -23,14 +26,12 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import AppRoutes from "@/router/approutes";
+
 export default {
   data() {
     return {
-      task: {},
-      route: {
-        edit: "/task/edit",
-        main: "/"
-      }
+      task: {}
     };
   },
   computed: {
@@ -52,15 +53,15 @@ export default {
   },
   methods: {
     ...mapActions("tasks", ["deleteTask"]),
-    edit(task) {
+    editTask(task) {
       this.$router.push({
-        path: `${this.route.edit}/${task.id}`,
+        name: "edit",
         params: { id: task.id }
       });
     },
     remove(task) {
       this.deleteTask(task).then(() => {
-        this.$router.push({ path: this.route.main });
+        this.$router.push({ path: AppRoutes.Home });
       });
     }
   }
@@ -73,6 +74,23 @@ export default {
   margin: 0 auto;
   width: 80%;
   border-radius: 1rem;
+  .wrapper_link {
+    text-decoration: none;
+    span {
+      text-decoration: none;
+      color: black;
+      font-size: 20px;
+      transition: 0.3s ease;
+    }
+    .arrow {
+      font-size: 24px;
+    }
+    &:hover {
+      span {
+        color: orangered;
+      }
+    }
+  }
   .bottom_wrapper {
     display: flex;
     justify-content: space-between;

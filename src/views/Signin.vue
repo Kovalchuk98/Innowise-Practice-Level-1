@@ -27,7 +27,7 @@
       <div>
         <p>
           Don't have an account?
-          <router-link :to="route.register">Sign Up</router-link>
+          <router-link to="/register">Sign Up</router-link>
         </p>
       </div>
     </div>
@@ -36,16 +36,14 @@
 
 <script>
 import { mapActions } from "vuex";
+import AppRoutes from "@/router/approutes";
+
 export default {
   data() {
     return {
       form: {
         email: "",
         password: ""
-      },
-      route: {
-        register: "/register",
-        main: "/"
       }
     };
   },
@@ -58,12 +56,12 @@ export default {
       }).then(() => {
         this.form.email = "";
         this.form.password = "";
-        this.$router.push({ path: this.route.main });
+        this.$router.push({ path: AppRoutes.Home });
       });
     },
     signInGoogle() {
       this.signInWithGoogle().then(() => {
-        this.$router.push({ path: this.route.main });
+        this.$router.push({ path: AppRoutes.Home });
       });
     }
   }

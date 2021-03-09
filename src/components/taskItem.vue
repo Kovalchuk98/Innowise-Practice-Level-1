@@ -11,21 +11,10 @@
       <label :for="task.id">{{ task.title }}</label>
     </div>
     <div>
-      <button
-        class="detail_btn"
-        @click="$router.push({ name: 'task', params: { id: task.id } })"
-      >
+      <button class="detail_btn" @click="getDetails(task)">
         Details
       </button>
-      <button
-        class="edit_btn"
-        @click="
-          $router.push({
-            path: `/task/edit/${task.id}`,
-            params: { id: task.id }
-          })
-        "
-      >
+      <button class="edit_btn" @click="editTask(task)">
         <img src="../assets/pencil.svg" alt="" width="15px" height="auto" />
       </button>
       <button class="remove_btn" @click="remove(task)">
@@ -37,6 +26,7 @@
 
 <script>
 import { mapActions } from "vuex";
+
 export default {
   props: {
     task: {
@@ -56,6 +46,18 @@ export default {
     },
     remove(task) {
       this.deleteTask({ date: task.date, id: task.id });
+    },
+    getDetails(task) {
+      this.$router.push({
+        name: "task",
+        params: { id: task.id }
+      });
+    },
+    editTask(task) {
+      this.$router.push({
+        name: "edit",
+        params: { id: task.id }
+      });
     }
   }
 };

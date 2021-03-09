@@ -24,13 +24,6 @@ export default {
       require: true
     }
   },
-  data() {
-    return {
-      route: {
-        create: "create"
-      }
-    };
-  },
   computed: {
     lengthTasks() {
       return Object.keys(this.taskArray).length;
@@ -38,7 +31,7 @@ export default {
   },
   methods: {
     create(tday) {
-      this.$router.push({ name: this.route.create, params: tday });
+      this.$router.push({ name: "create", params: tday });
     }
   }
 };

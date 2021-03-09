@@ -3,7 +3,12 @@
     <mobileMenu v-if="isShow" @hide="isShow = !isShow" :user="user" />
     <div>
       <button class="menu_btn" @click="isShow = !isShow">
-        <img src="../../assets/burger.svg" alt="" width="20px" height="auto" />
+        <img
+          src="../../assets/burger.svg"
+          alt="Menu_btn"
+          width="20px"
+          height="auto"
+        />
       </button>
       <router-link to="/" class="header_title">Clever To-Do List</router-link>
     </div>
@@ -12,11 +17,10 @@
         <img
           class="user_img"
           :src="user.photoURL || require('../../assets/noimg.png')"
-          alt="User Avatar"
+          alt="Avatar"
           width="34px"
           height="34px"
         />
-        <!-- :src="user.photoURL || require('../../assets/noimg.png')" -->
         <span class="user_name">{{ user.displayName || user.email }}</span>
       </div>
       <button @click="signout" class="signout_btn">Sign Out</button>
@@ -27,6 +31,8 @@
 <script>
 import mobileMenu from "@/components/UI/Menu.vue";
 import { mapActions, mapMutations } from "vuex";
+import AppRoutes from "@/router/approutes";
+
 export default {
   props: {
     user: {
@@ -39,10 +45,7 @@ export default {
   },
   data() {
     return {
-      isShow: false,
-      route: {
-        signin: "/signin"
-      }
+      isShow: false
     };
   },
   methods: {
@@ -53,7 +56,7 @@ export default {
         this.setActiveDays([]);
         this.setDoneDays([]);
         this.setTasks(null);
-        this.$router.push({ path: this.route.signin });
+        this.$router.push({ path: AppRoutes.Signin });
       });
     }
   }
